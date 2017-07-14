@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import path from 'path';
 import config from './config';
 import logInRoute from './routes/log-in-route';
+import itemRoute from './routes/item-route';
 import registrationRoute from './routes/registration-route';
 import userRoute from './routes/user-route';
 
@@ -26,6 +27,7 @@ mongoose.connect(cfg.DATABASE, {useMongoClient: true});
 
 // Add routes
 logInRoute(app);
+itemRoute(app);
 registrationRoute(app);
 userRoute(app);
 
