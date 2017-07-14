@@ -26,6 +26,7 @@ export const logIn = (req, res) => {
             e.incorrectCredentials(res);
         }
     }).catch(err => {
+        // TODO log error
         e.serverErr(res);
     });
 };
