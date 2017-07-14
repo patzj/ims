@@ -1,6 +1,7 @@
 export const httpStatus = {
     OK: 200,
     CREATED: 201,
+    NOT_CONTENT: 204,
     BAD_REQUEST: 400,
     FORBIDDEN: 403,
     NOT_FOUND: 404,
@@ -13,7 +14,7 @@ export const error = {
             message: 'Bad request'
         });
     },
-    notFount: res => {
+    notFound: res => {
         res.status(httpStatus.NOT_FOUND).json({
             message: 'Not found'
         });

@@ -18,6 +18,7 @@ export const register = (req, res) => {
 
             user.save(err => {
                 if(err) {
+                    // TODO log error
                     e.serverErr(res);
                 } else {
                     res.json({
@@ -29,6 +30,7 @@ export const register = (req, res) => {
             });
         }
     }).catch(err => {
+        // TODO log error
         e.serverErr(res);
     });
 };

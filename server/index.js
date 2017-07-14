@@ -6,6 +6,7 @@ import path from 'path';
 import config from './config';
 import logInRoute from './routes/log-in-route';
 import registrationRoute from './routes/registration-route';
+import userRoute from './routes/user-route';
 
 const app = new Express();
 const cfg = config();
@@ -26,6 +27,7 @@ mongoose.connect(cfg.DATABASE, {useMongoClient: true});
 // Add routes
 logInRoute(app);
 registrationRoute(app);
+userRoute(app);
 
 // Run app
 app.listen(cfg.PORT, () => {

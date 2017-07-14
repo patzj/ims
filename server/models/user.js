@@ -19,6 +19,14 @@ const schema = mongoose.Schema({
         type: String,
         enum: ['SYSTEM ADMIN', 'INVENTORY MGR'],
         default: 'INVENTORY MGR'
+    },
+    created: {
+        type: Date,
+        default: Date.now()
+    },
+    modified: {
+        type: Date,
+        default: null
     }
 });
 
