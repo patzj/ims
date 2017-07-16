@@ -9,7 +9,7 @@ const generateToken = user => {
         {expiresIn: cfg.JWT.EXPIRATION});
 };
 
-export const logIn = (req, res) => {
+export const logIn = app => (req, res) => {
     const data = req.body;
     const query = User.findOne({username: data.username});
     const promise = query.exec();
@@ -26,7 +26,7 @@ export const logIn = (req, res) => {
             e.incorrectCredentials(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };

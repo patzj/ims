@@ -1,7 +1,7 @@
 import Item from '../models/item';
 import { error as e, httpStatus as status } from '../utils/response-utils';
 
-export const getOne = (req, res) => {
+export const getOne = app => (req, res) => {
     const query = Item.findOne({slug: req.params.slug});
     const promise = query.exec();
 
@@ -20,12 +20,12 @@ export const getOne = (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const getAll = (req, res) => {
+export const getAll = app => (req, res) => {
     const query = Item.find();
     const promise = query.exec();
 
@@ -47,13 +47,12 @@ export const getAll = (req, res) => {
             items: data
         });
     }).catch(err => {
-        // TODO log error
-        console.log(err);
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const post = (req, res) => {
+export const post = app => (req, res) => {
     const data = req.body;
     const item = new Item(data);
 
@@ -75,12 +74,12 @@ export const post = (req, res) => {
             modified: item.modified
         });
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const patch = (req, res) => {
+export const patch = app => (req, res) => {
     const query = Item.findOne({slug: req.params.slug});
     const promise = query.exec();
 
@@ -109,13 +108,13 @@ export const patch = (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
 
-export const remove = (req, res) => {
+export const remove = app => (req, res) => {
     const query = Item.remove({slug: req.params.slug});
     const promise = query.exec();
 
@@ -126,12 +125,12 @@ export const remove = (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const itemIn = (req, res) => {
+export const itemIn = app => (req, res) => {
     const query = Item.findOne({slug: req.params.slug});
     const promise = query.exec();
 
@@ -156,13 +155,13 @@ export const itemIn = (req, res) => {
         if(err === 'Invalid input') {
             e.invalidInput(res, err);
         } else {
-            // TODO log error
+            app.get('logger').error(`${req.url} - ${err.toString()}`)
             e.serverErr(res);
         }
     });
 };
 
-export const itemOut = (req, res) => {
+export const itemOut = app => (req, res) => {
     const query = Item.findOne({slug: req.params.slug});
     const promise = query.exec();
 
@@ -187,7 +186,7 @@ export const itemOut = (req, res) => {
         if(err === 'Invalid input') {
             e.invalidInput(res, err);
         } else {
-            // TODO log error
+            app.get('logger').error(`${req.url} - ${err.toString()}`)
             e.serverErr(res);
         }
     });
