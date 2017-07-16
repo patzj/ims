@@ -1,7 +1,7 @@
 import User from '../models/user';
 import { error as e, httpStatus as status } from '../utils/response-utils';
 
-export const getOne = (req, res) => {
+export const getOne = app => (req, res) => {
     const query = User.findOne({username: req.params.username});
     const promise = query.exec();
 
@@ -18,12 +18,12 @@ export const getOne = (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const getAll = (req, res) => {
+export const getAll = app => (req, res) => {
     const query = User.find();
     const promise = query.exec();
 
@@ -43,12 +43,12 @@ export const getAll = (req, res) => {
             users: data
         });
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const post = (req, res) => {
+export const post = app => (req, res) => {
     const data = req.body;
     const query = User.findOne({username: data.username});
     const promise = query.exec();
@@ -57,6 +57,14 @@ export const post = (req, res) => {
         if(doc) {
             e.alreadyExists(res)('Username');
         } else {
+
+            // Required fields
+            if(!data.hasOwnProperty('username') ||
+                !data.hasOwnProperty('password')) {
+                e.invalidInput(res, 'Invalid input');
+                return;
+            }
+
             const user = new User({
                 username: data.username,
                 password: User.generateHash(data.password),
@@ -78,12 +86,12 @@ export const post = (req, res) => {
             });
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const patch = (req, res) => {
+export const patch = app => (req, res) => {
     const query = User.findOne({username: req.params.username});
     const promise = query.exec();
 
@@ -113,12 +121,12 @@ export const patch = (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
 
-export const remove = (req, res) => {
+export const remove = app => (req, res) => {
     const query = User.remove({username: req.params.username});
     const promise = query.exec();
 
@@ -129,7 +137,7 @@ export const remove = (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        // TODO log error
+        app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
     });
 };
