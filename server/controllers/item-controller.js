@@ -120,7 +120,7 @@ export const remove = (req, res) => {
     const promise = query.exec();
 
     promise.then(doc => {
-        if(doc.result.length > 0) {
+        if(doc.result.n > 0) {
             res.status(status.NOT_CONTENT).json();
         } else {
             e.notFound(res);
