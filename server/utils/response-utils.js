@@ -5,6 +5,7 @@ export const httpStatus = {
     BAD_REQUEST: 400,
     FORBIDDEN: 403,
     NOT_FOUND: 404,
+    UNP_ENTITY: 422,
     SERVER_ERR: 500
 };
 
@@ -32,6 +33,11 @@ export const error = {
     incorrectCredentials: res => {
         res.status(httpStatus.BAD_REQUEST).json({
             message: 'Incorrect username or password'
+        });
+    },
+    invalidInput: (res, msg) => {
+        res.status(httpStatus.UNP_ENTITY).json({
+            message: msg
         });
     }
 };
