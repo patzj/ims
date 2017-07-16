@@ -9,7 +9,7 @@ const schema = mongoose.Schema({
     category: {
         type: Array
     },
-    count: {
+    quantity: {
         type: Number,
         required: true,
         default: 0
@@ -34,20 +34,20 @@ const schema = mongoose.Schema({
     }
 });
 
-schema.methods.add = function(n) {
+schema.methods.itemIn = function(n) {
     if(isNaN(n) || parseInt(n) < 0) {
         throw 'Invalid input';
     }
 
-    this.count += n;
+    this.quantity += n;
 };
 
-schema.methods.subtract = function(n) {
-    if(isNaN(n) || parseInt(n) < 0 || parseInt(n) > this.count) {
+schema.methods.itemOut = function(n) {
+    if(isNaN(n) || parseInt(n) < 0 || parseInt(n) > this.quantity) {
         throw 'Invalid input';
     }
 
-    this.count -= n;
+    this.quantity -= n;
 };
 
 schema.methods.generateSlug = function() {

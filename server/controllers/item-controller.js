@@ -10,7 +10,7 @@ export const getOne = (req, res) => {
             res.json({
                 name: doc.name,
                 category: doc.category,
-                count: doc.count,
+                quantity: doc.quantity,
                 price: doc.price,
                 slug: doc.slug,
                 created: doc.created,
@@ -35,7 +35,7 @@ export const getAll = (req, res) => {
             data.push({
                 name: item.name,
                 category: item.category,
-                count: item.count,
+                quantity: item.quantity,
                 price: item.price,
                 slug: item.slug,
                 created: item.created,
@@ -65,12 +65,131 @@ export const post = (req, res) => {
             res.status(status.CREATED).json({
                 name: item.name,
                 category: item.category,
-                count: item.count,
+                quantity: item.quantity,
                 price: item.price,
                 slug: item.slug,
                 created: item.created,
                 modified: item.modified
             });
+        }
+    });
+};
+
+export const patch = (req, res) => {
+    const query = Item.findOne({slug: req.params.slug});
+    const promise = query.exec();
+
+    promise.then(doc => {
+        if(doc) {
+            const data = req.body;
+
+            for(let key in data) {
+                doc[key] = data[key]
+            }
+
+            doc.generateSlug();
+            doc.save(err => {
+                if(err) {
+                    // TODO log error
+                    console.log(err);
+                    e.serverErr(res);
+                } else {
+                    res.json({
+                        name: doc.name,
+                        category: doc.category,
+                        quantity: doc.quantity,
+                        price: doc.price,
+                        slug: doc.slug,
+                        created: doc.created,
+                        modified: doc.modified
+                    });
+                }
+            });
+        } else {
+            e.notFound(res);
+        }
+    }).catch(err => {
+        // TODO log error
+        console.log(err);
+        e.serverErr(res);
+    });
+};
+
+
+export const remove = (req, res) => {
+    const query = Item.findOne({slug: req.params.slug});
+    const promise = query.exec();
+
+    promise.then(doc => {
+        if(doc) {
+            res.status(status.NOT_CONTENT).json();
+        } else {
+            e.notFound(res);
+        }
+    }).catch(err => {
+        // TODO log error
+        e.serverErr(res);
+    });
+};
+
+export const itemIn = (req, res) => {
+    const query = Item.findOne({slug: req.params.slug});
+    const promise = query.exec();
+
+    promise.then(doc => {
+        if(doc) {
+            doc.itemIn(req.body.quantity);
+            doc.save().then(() => {
+                res.json({
+                    name: doc.name,
+                    category: doc.category,
+                    quantity: doc.quantity,
+                    price: doc.price,
+                    slug: doc.slug,
+                    created: doc.created,
+                    modified: doc.modified
+                });
+            });
+        } else {
+            e.notFound(res);
+        }
+    }).catch(err => {
+        if(err === 'Invalid input') {
+            e.invalidInput(res, err);
+        } else {
+            // TODO log error
+            e.serverErr(res);
+        }
+    });
+};
+
+export const itemOut = (req, res) => {
+    const query = Item.findOne({slug: req.params.slug});
+    const promise = query.exec();
+
+    promise.then(doc => {
+        if(doc) {
+            doc.itemOut(req.body.quantity);
+            doc.save().then(() => {
+                res.json({
+                    name: doc.name,
+                    category: doc.category,
+                    quantity: doc.quantity,
+                    price: doc.price,
+                    slug: doc.slug,
+                    created: doc.created,
+                    modified: doc.modified
+                });
+            });
+        } else {
+            e.notFound(res);
+        }
+    }).catch(err => {
+        if(err === 'Invalid input') {
+            e.invalidInput(res, err);
+        } else {
+            // TODO log error
+            e.serverErr(res);
         }
     });
 };
