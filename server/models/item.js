@@ -51,7 +51,11 @@ schema.methods.itemOut = function(n) {
 };
 
 schema.methods.generateSlug = function() {
-    this.slug = this.name.trim().toLowerCase().split(' ').join('-');
+    if(typeof(this.name) !== 'undefined') {
+        this.slug = this.name.trim().toLowerCase().split(' ').join('-');
+    } else {
+        throw 'Invalid input';
+    }
 };
 
 export const Item = mongoose.model('Item', schema);

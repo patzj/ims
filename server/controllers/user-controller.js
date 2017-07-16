@@ -50,29 +50,36 @@ export const getAll = (req, res) => {
 
 export const post = (req, res) => {
     const data = req.body;
-    const user = new User({
-        username: data.username,
-        password: User.generateHash(data.password),
-        name: data.name || ''
-    });
+    const query = User.findOne({username: data.username});
+    const promise = query.exec();
 
-    if(data.role) {
-        user.role = data.role;
-    }
-
-    user.save(err => {
-        if(err) {
-            // TODO log error
-            e.serverErr(res);
+    promise.then(doc => {
+        if(doc) {
+            e.alreadyExists(res)('Username');
         } else {
-            res.status(status.CREATED).json({
-                username: user.username,
-                name: user.name,
-                role: user.role,
-                created: user.created,
-                modified: user.modified
+            const user = new User({
+                username: data.username,
+                password: User.generateHash(data.password),
+                name: data.name || ''
+            });
+
+            if(data.role) {
+                user.role = data.role;
+            }
+
+            user.save().then(() => {
+                res.status(status.CREATED).json({
+                    username: user.username,
+                    name: user.name,
+                    role: user.role,
+                    created: user.created,
+                    modified: user.modified
+                });
             });
         }
+    }).catch(err => {
+        // TODO log error
+        e.serverErr(res);
     });
 };
 
@@ -85,23 +92,22 @@ export const patch = (req, res) => {
             const data = req.body;
 
             for(let key in data) {
-                doc[key] = data[key]
+                if(key !== 'password') {
+                    doc[key] = data[key]
+                } else {
+                    doc[key] = User.generateHash(data[key])
+                }
             }
 
             doc.modified = Date.now();
-            doc.save(err => {
-                if(err) {
-                    // TODO log error
-                    e.serverErr(res);
-                } else {
-                    res.json({
-                        username: doc.username,
-                        name: doc.name,
-                        role: doc.role,
-                        created: doc.created,
-                        modified: doc.modified
-                    });
-                }
+            doc.save().then(() => {
+                res.json({
+                    username: doc.username,
+                    name: doc.name,
+                    role: doc.role,
+                    created: doc.created,
+                    modified: doc.modified
+                });
             });
         } else {
             e.notFound(res);
@@ -117,7 +123,7 @@ export const remove = (req, res) => {
     const promise = query.exec();
 
     promise.then(doc => {
-        if(doc) {
+        if(doc.result.n > 0) {
             res.status(status.NOT_CONTENT).json();
         } else {
             e.notFound(res);

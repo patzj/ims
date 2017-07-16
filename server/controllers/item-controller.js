@@ -56,22 +56,27 @@ export const getAll = (req, res) => {
 export const post = (req, res) => {
     const data = req.body;
     const item = new Item(data);
-    item.generateSlug();
-    item.save(err => {
-        if(err) {
-            // TODO log error
-            e.serverErr(res);
-        } else {
-            res.status(status.CREATED).json({
-                name: item.name,
-                category: item.category,
-                quantity: item.quantity,
-                price: item.price,
-                slug: item.slug,
-                created: item.created,
-                modified: item.modified
-            });
-        }
+
+    try {
+        item.generateSlug();
+    } catch(err) {
+        e.invalidInput(res, err);
+        return;
+    }
+
+    item.save().then(() => {
+        res.status(status.CREATED).json({
+            name: item.name,
+            category: item.category,
+            quantity: item.quantity,
+            price: item.price,
+            slug: item.slug,
+            created: item.created,
+            modified: item.modified
+        });
+    }).catch(err => {
+        // TODO log error
+        e.serverErr(res);
     });
 };
 
@@ -88,40 +93,34 @@ export const patch = (req, res) => {
             }
 
             doc.generateSlug();
-            doc.save(err => {
-                if(err) {
-                    // TODO log error
-                    console.log(err);
-                    e.serverErr(res);
-                } else {
-                    res.json({
-                        name: doc.name,
-                        category: doc.category,
-                        quantity: doc.quantity,
-                        price: doc.price,
-                        slug: doc.slug,
-                        created: doc.created,
-                        modified: doc.modified
-                    });
-                }
+            doc.modified = Date.now();
+            doc.save().then(() => {
+                res.json({
+                    name: doc.name,
+                    category: doc.category,
+                    quantity: doc.quantity,
+                    price: doc.price,
+                    slug: doc.slug,
+                    created: doc.created,
+                    modified: doc.modified
+                });
             });
         } else {
             e.notFound(res);
         }
     }).catch(err => {
         // TODO log error
-        console.log(err);
         e.serverErr(res);
     });
 };
 
 
 export const remove = (req, res) => {
-    const query = Item.findOne({slug: req.params.slug});
+    const query = Item.remove({slug: req.params.slug});
     const promise = query.exec();
 
     promise.then(doc => {
-        if(doc) {
+        if(doc.result.length > 0) {
             res.status(status.NOT_CONTENT).json();
         } else {
             e.notFound(res);

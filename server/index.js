@@ -4,10 +4,13 @@ import mongoose from 'mongoose';
 import morgan from 'morgan';
 import path from 'path';
 import config from './config';
+
 import logInRoute from './routes/log-in-route';
 import itemRoute from './routes/item-route';
 import registrationRoute from './routes/registration-route';
 import userRoute from './routes/user-route';
+
+import jsonChecker from './middlewares/json-checker';
 
 const app = new Express();
 const cfg = config();
@@ -16,6 +19,7 @@ const cfg = config();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(Express.static(path.resolve(__dirname, '../build/assets')));
+app.use(jsonChecker);
 
 if(process.env.NODE_ENV !== 'production') {
     app.use(morgan('dev'));
