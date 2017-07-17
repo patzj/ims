@@ -12,6 +12,7 @@ import itemRoute from './routes/item-route';
 import registrationRoute from './routes/registration-route';
 import userRoute from './routes/user-route';
 
+import accessChecker from './middlewares/access-checker';
 import jsonChecker from './middlewares/json-checker';
 
 const app = new Express();
@@ -35,6 +36,7 @@ winston.configure({
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(Express.static(path.resolve(__dirname, '../build/assets')));
+app.use(accessChecker(app));
 app.use(jsonChecker);
 app.set('logger', winston);
 
