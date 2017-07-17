@@ -55,7 +55,7 @@ export const post = app => (req, res) => {
 
     promise.then(doc => {
         if(doc) {
-            e.alreadyExists(res)('Username');
+            e.alreadyExists(res)(doc.username);
         } else {
 
             // Required fields
@@ -98,6 +98,23 @@ export const patch = app => (req, res) => {
     promise.then(doc => {
         if(doc) {
             const data = req.body;
+
+            if(data.username) {
+                const query2 = User.findOne({username: data.username});
+                const promise2 = query.exec();
+
+                promise2.then(user => {
+                    if(user &&
+                        user.username.toLowerCase() !==
+                        doc.username.toLowerCase()) {
+                        e.alreadyExists(res)(data.username);
+                    }
+                }).catch(err => {
+                    app.get('logger')
+                        .error(`${req.url} - ${err.toString()}`);
+                    e.serverErr(res);
+                });
+            }
 
             for(let key in data) {
                 if(key !== 'password') {
