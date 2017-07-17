@@ -4,6 +4,11 @@ import { error as e } from '../utils/response-utils';
 import { getOne, getAll, post, patch, remove }
     from '../controllers/user-controller';
 
+const logUnauthorized = (app, req, decoded) => {
+    app.get('logger')
+        .warn(`${req.url} - ${req.method} - ${decoded._doc.username}`);
+};
+
 const userPatchMW = (req, res, next) => {
     jwt.verify(
         req.headers['x-access-token'],
@@ -15,6 +20,7 @@ const userPatchMW = (req, res, next) => {
             ) {
                 next();
             } else {
+                logUnauthorized(app, req, decoded);
                 e.forbidden(res);
             }
         }

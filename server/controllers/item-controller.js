@@ -54,25 +54,34 @@ export const getAll = app => (req, res) => {
 
 export const post = app => (req, res) => {
     const data = req.body;
-    const item = new Item(data);
+    const query = Item.findOne({name: data.name});
+    const promise = query.exec();
 
-    try {
-        item.generateSlug();
-    } catch(err) {
-        e.invalidInput(res, err);
-        return;
-    }
+    promise.then(doc => {
+        if(doc) {
+            e.alreadyExists(res)(doc.name);
+        } else {
+            const item = new Item(data);
 
-    item.save().then(() => {
-        res.status(status.CREATED).json({
-            name: item.name,
-            category: item.category,
-            quantity: item.quantity,
-            price: item.price,
-            slug: item.slug,
-            created: item.created,
-            modified: item.modified
-        });
+            try {
+                item.generateSlug();
+            } catch(err) {
+                e.invalidInput(res, err);
+                return;
+            }
+
+            item.save().then(() => {
+                res.status(status.CREATED).json({
+                    name: item.name,
+                    category: item.category,
+                    quantity: item.quantity,
+                    price: item.price,
+                    slug: item.slug,
+                    created: item.created,
+                    modified: item.modified
+                });
+            });
+        }
     }).catch(err => {
         app.get('logger').error(`${req.url} - ${err.toString()}`)
         e.serverErr(res);
@@ -86,6 +95,22 @@ export const patch = app => (req, res) => {
     promise.then(doc => {
         if(doc) {
             const data = req.body;
+
+            if(data.name) {
+                const query2 = Item.findOne({name: data.name});
+                const promise2 = query.exec();
+
+                promise2.then(item => {
+                    if(item &&
+                        item.name.toLowerCase() !== doc.name.toLowerCase()) {
+                        e.alreadyExists(res)(data.name);
+                    }
+                }).catch(err => {
+                    app.get('logger')
+                        .error(`${req.url} - ${err.toString()}`);
+                    e.serverErr(res);
+                });
+            }
 
             for(let key in data) {
                 doc[key] = data[key]
@@ -125,7 +150,7 @@ export const remove = app => (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        app.get('logger').error(`${req.url} - ${err.toString()}`)
+        app.get('logger').error(`${req.url} - ${err.toString()}`);
         e.serverErr(res);
     });
 };
