@@ -14,9 +14,10 @@ export const accessChecker = app => (req, res, next) => {
                             .error(`${req.url} - ${err.toString()}`);
                         e.serverErr(res);
                     } else if(decoded) {
-                        // only system admin can access User APIs
+                        // only system admin have full access User APIs
                         if((req.url.indexOf('users') > -1 ||
                             req.url.indexOf('register') > -1) &&
+                            req.method !== 'PATCH' &&
                             decoded._doc.role !== 'SYSTEM ADMIN') {
                             e.forbidden(res);
                         } else {
