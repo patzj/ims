@@ -39,5 +39,10 @@ export const error = {
         res.status(httpStatus.UNP_ENTITY).json({
             message: msg
         });
+    },
+    forbidden: (res) => {
+        res.status(httpStatus.FORBIDDEN).json({
+            message: 'Forbidden'
+        });
     }
 };
