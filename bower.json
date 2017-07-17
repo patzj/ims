@@ -1,0 +1,13 @@
+{
+    "name": "ims",
+    "version": "1.0.0",
+    "dependencies": {
+        "bootstrap": "latest"
+    },
+    "install": {
+        "path": "build/assets/",
+        "sources": {
+            "bootstrap": "bower_components/bootstrap/dist/**"
+        }
+    }
+}

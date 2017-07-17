@@ -12,7 +12,7 @@ const logUnauthorized = (app, req) => {
 };
 
 export const accessChecker = app => (req, res, next) => {
-    if(req.url !== '/api/log-in') {
+    if(req.url.indexOf('api') > -1 && req.url !== '/api/log-in') {
         if(req.headers['x-access-token']) {
             jwt.verify(
                 req.headers['x-access-token'],
