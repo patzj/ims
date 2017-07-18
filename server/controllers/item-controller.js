@@ -2,17 +2,17 @@ import Item from '../models/item';
 import { error as e, httpStatus as status } from '../utils/response-utils';
 
 export const getOne = app => (req, res) => {
-    const query = Item.findOne({slug: req.params.slug});
+    const query = Item.findOne({code: req.params.code});
     const promise = query.exec();
 
     promise.then(doc => {
         if(doc) {
             res.json({
+                code: doc.code,
                 name: doc.name,
                 category: doc.category,
                 quantity: doc.quantity,
                 price: doc.price,
-                slug: doc.slug,
                 created: doc.created,
                 modified: doc.modified
             });
@@ -20,7 +20,7 @@ export const getOne = app => (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        app.get('logger').error(`${req.url} - ${err.toString()}`)
+        app.get('logger').error(`${req.url} - ${err.toString()}`);
         e.serverErr(res);
     });
 };
@@ -46,11 +46,11 @@ export const getAll = app => (req, res) => {
         const data = [];
         doc.forEach(item => {
             data.push({
+                code: item.code,
                 name: item.name,
                 category: item.category,
                 quantity: item.quantity,
                 price: item.price,
-                slug: item.slug,
                 created: item.created,
                 modified: item.modified
             });
@@ -60,13 +60,14 @@ export const getAll = app => (req, res) => {
             items: data
         });
     }).catch(err => {
-        app.get('logger').error(`${req.url} - ${err.toString()}`)
+        app.get('logger').error(`${req.url} - ${err.toString()}`);
         e.serverErr(res);
     });
 };
 
 export const post = app => (req, res) => {
     const data = req.body;
+    delete data.code;
     const query = Item.findOne({name: data.name});
     const promise = query.exec();
 
@@ -76,38 +77,36 @@ export const post = app => (req, res) => {
         } else {
             const item = new Item(data);
 
-            try {
-                item.generateSlug();
-            } catch(err) {
-                e.invalidInput(res, err);
-                return;
-            }
-
+            item.isNew = true;
             item.save().then(() => {
                 res.status(status.CREATED).json({
+                    code: item.code,
                     name: item.name,
                     category: item.category,
                     quantity: item.quantity,
                     price: item.price,
-                    slug: item.slug,
                     created: item.created,
                     modified: item.modified
                 });
+            }).catch(err => {
+                app.get('logger').error(`${req.url} - ${err.toString()}`);
+                e.serverErr(res);
             });
         }
     }).catch(err => {
-        app.get('logger').error(`${req.url} - ${err.toString()}`)
+        app.get('logger').error(`${req.url} - ${err.toString()}`);
         e.serverErr(res);
     });
 };
 
 export const patch = app => (req, res) => {
-    const query = Item.findOne({slug: req.params.slug});
+    const query = Item.findOne({code: req.params.code});
     const promise = query.exec();
 
     promise.then(doc => {
         if(doc) {
             const data = req.body;
+            delete  data.code;
 
             if(data.name) {
                 const query2 = Item.findOne({name: data.name});
@@ -129,15 +128,14 @@ export const patch = app => (req, res) => {
                 doc[key] = data[key]
             }
 
-            doc.generateSlug();
             doc.modified = Date.now();
             doc.save().then(() => {
                 res.json({
+                    code: doc.code,
                     name: doc.name,
                     category: doc.category,
                     quantity: doc.quantity,
                     price: doc.price,
-                    slug: doc.slug,
                     created: doc.created,
                     modified: doc.modified
                 });
@@ -146,14 +144,14 @@ export const patch = app => (req, res) => {
             e.notFound(res);
         }
     }).catch(err => {
-        app.get('logger').error(`${req.url} - ${err.toString()}`)
+        app.get('logger').error(`${req.url} - ${err.toString()}`);
         e.serverErr(res);
     });
 };
 
 
 export const remove = app => (req, res) => {
-    const query = Item.remove({slug: req.params.slug});
+    const query = Item.remove({code: req.params.code});
     const promise = query.exec();
 
     promise.then(doc => {
@@ -169,7 +167,7 @@ export const remove = app => (req, res) => {
 };
 
 export const itemIn = app => (req, res) => {
-    const query = Item.findOne({slug: req.params.slug});
+    const query = Item.findOne({code: req.params.code});
     const promise = query.exec();
 
     promise.then(doc => {
@@ -177,11 +175,11 @@ export const itemIn = app => (req, res) => {
             doc.itemIn(req.body.quantity);
             doc.save().then(() => {
                 res.json({
+                    code: doc.code,
                     name: doc.name,
                     category: doc.category,
                     quantity: doc.quantity,
                     price: doc.price,
-                    slug: doc.slug,
                     created: doc.created,
                     modified: doc.modified
                 });
@@ -193,14 +191,14 @@ export const itemIn = app => (req, res) => {
         if(err === 'Invalid input') {
             e.invalidInput(res, err);
         } else {
-            app.get('logger').error(`${req.url} - ${err.toString()}`)
+            app.get('logger').error(`${req.url} - ${err.toString()}`);
             e.serverErr(res);
         }
     });
 };
 
 export const itemOut = app => (req, res) => {
-    const query = Item.findOne({slug: req.params.slug});
+    const query = Item.findOne({code: req.params.code});
     const promise = query.exec();
 
     promise.then(doc => {
@@ -208,11 +206,11 @@ export const itemOut = app => (req, res) => {
             doc.itemOut(req.body.quantity);
             doc.save().then(() => {
                 res.json({
+                    code: doc.code,
                     name: doc.name,
                     category: doc.category,
                     quantity: doc.quantity,
                     price: doc.price,
-                    slug: doc.slug,
                     created: doc.created,
                     modified: doc.modified
                 });
@@ -224,7 +222,7 @@ export const itemOut = app => (req, res) => {
         if(err === 'Invalid input') {
             e.invalidInput(res, err);
         } else {
-            app.get('logger').error(`${req.url} - ${err.toString()}`)
+            app.get('logger').error(`${req.url} - ${err.toString()}`);
             e.serverErr(res);
         }
     });
