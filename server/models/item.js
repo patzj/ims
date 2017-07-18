@@ -1,6 +1,13 @@
 import mongoose from 'mongoose';
+import Hashids from 'hashids';
 
 const schema = mongoose.Schema({
+    code: {
+        type: String,
+        required: true,
+        unique: true,
+        default: () => (new Hashids).encode(Date.now()),
+    },
     name: {
         type: String,
         required: true,
@@ -18,11 +25,6 @@ const schema = mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    },
-    slug: {
-        type: String,
-        required: true,
-        unique: true
     },
     created: {
         type: Date,
@@ -48,14 +50,6 @@ schema.methods.itemOut = function(n) {
     }
 
     this.quantity -= n;
-};
-
-schema.methods.generateSlug = function() {
-    if(typeof(this.name) !== 'undefined') {
-        this.slug = this.name.trim().toLowerCase().split(' ').join('-');
-    } else {
-        throw 'Invalid input';
-    }
 };
 
 export const Item = mongoose.model('Item', schema);

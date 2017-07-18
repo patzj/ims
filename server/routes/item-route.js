@@ -3,12 +3,12 @@ import { getOne, getAll, post, patch, remove, itemIn, itemOut }
 
 export const itemRoute = app => {
     app.get('/api/items', getAll(app));
-    app.get('/api/items/:slug', getOne(app));
+    app.get('/api/items/:code', getOne(app));
     app.post('/api/items', post(app));
-    app.patch('/api/items/:slug', patch(app));
-    app.delete('/api/items/:slug', remove(app));
-    app.post('/api/items/:slug/in', itemIn(app));
-    app.post('/api/items/:slug/out', itemOut(app));
+    app.patch('/api/items/:code', patch(app));
+    app.delete('/api/items/:code', remove(app));
+    app.post('/api/items/:code/in', itemIn(app));
+    app.post('/api/items/:code/out', itemOut(app));
 };
 
 export default itemRoute;
