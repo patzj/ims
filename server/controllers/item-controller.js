@@ -26,7 +26,20 @@ export const getOne = app => (req, res) => {
 };
 
 export const getAll = app => (req, res) => {
-    const query = Item.find();
+    let query = null;
+    if (req.query.s && req.query.c) {
+        query = Item.find().and([
+            {name: new RegExp(res.query.s, 'i')},
+            {category: new RegExp(res.query.c, 'i')}
+        ]);
+    } else if(req.query.s) {
+        query = Item.find({name: new RegExp(req.query.s, 'i')});
+    } else if(req.query.c) {
+        query = Item.find({category: new RegExp(req.query.c, 'i')});
+    } else {
+        query = Item.find();
+    }
+
     const promise = query.exec();
 
     promise.then(doc => {
