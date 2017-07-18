@@ -1,5 +1,5 @@
 import User from '../models/user';
-import { error as e, httpStatus as status } from '../utils/response-utils';
+import { error as e, httpStatus as status } from '../utils/response-util';
 
 export const getOne = app => (req, res) => {
     const query = User.findOne({username: req.params.username});

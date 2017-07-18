@@ -10,6 +10,7 @@ import config from './config';
 import logInRoute from './routes/log-in-route';
 import itemRoute from './routes/item-route';
 import registrationRoute from './routes/registration-route';
+import transactionRoute from './routes/transaction-route';
 import userRoute from './routes/user-route';
 
 import accessChecker from './middlewares/access-checker';
@@ -55,6 +56,7 @@ app.get('/', (req, res) => {
 logInRoute(app);
 itemRoute(app);
 registrationRoute(app);
+transactionRoute(app);
 userRoute(app);
 
 // Run app

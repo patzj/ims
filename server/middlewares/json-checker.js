@@ -1,4 +1,4 @@
-import { error as e } from '../utils/response-utils';
+import { error as e } from '../utils/response-util';
 
 export const jsonChecker = (req, res, next) => {
     if((req.method == 'POST' || req.method == 'PATCH') &&

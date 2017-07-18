@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { error as e } from '../utils/response-utils';
+import { error as e } from '../utils/response-util';
 import User from '../models/user';
 
 const cfg = config();

@@ -1,5 +1,5 @@
 import Item from '../models/item';
-import { error as e, httpStatus as status } from '../utils/response-utils';
+import { error as e, httpStatus as status } from '../utils/response-util';
 
 export const getOne = app => (req, res) => {
     const query = Item.findOne({code: req.params.code});
