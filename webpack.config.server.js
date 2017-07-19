@@ -7,6 +7,10 @@ module.exports = {
         path: path.resolve(__dirname, 'build'),
         filename: 'server.js'
     },
+    target: 'node',
+    node: {
+        fs: "empty"
+    },
     module: {
         loaders: [
             {

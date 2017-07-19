@@ -1,0 +1,38 @@
+$default_bg_color: rgb(0, 197, 144);
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.vcenter {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#log-in-form {
+
+    header {
+        text-align: center;
+
+        h1 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+    }
+
+    button {
+        background: $default_bg_color;
+        border: $default_bg_color / 1.5;
+        font-weight: bold;
+    }
+
+    #auth-error {
+        margin-top: 15px;
+        margin-bottom: -15px;
+    }
+
+}
