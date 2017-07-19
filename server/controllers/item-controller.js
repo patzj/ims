@@ -1,4 +1,5 @@
 import Item from '../models/item';
+import Transaction from '../models/transaction';
 import { error as e, httpStatus as status } from '../utils/response-util';
 
 export const getOne = app => (req, res) => {
@@ -79,14 +80,26 @@ export const post = app => (req, res) => {
 
             item.isNew = true;
             item.save().then(() => {
-                res.status(status.CREATED).json({
-                    code: item.code,
-                    name: item.name,
-                    category: item.category,
+                const transaction = new Transaction({
+                    transactionType: 'INCOMING',
+                    itemCode: item.code,
                     quantity: item.quantity,
-                    price: item.price,
-                    created: item.created,
-                    modified: item.modified
+                    price: item.price
+                });
+
+                transaction.save(() => {
+                    res.status(status.CREATED).json({
+                        code: item.code,
+                        name: item.name,
+                        category: item.category,
+                        quantity: item.quantity,
+                        price: item.price,
+                        created: item.created,
+                        modified: item.modified
+                    });
+                }).catch(err => {
+                    app.get('logger').error(`${req.url} - ${err.toString()}`);
+                    e.serverErr(res);
                 });
             }).catch(err => {
                 app.get('logger').error(`${req.url} - ${err.toString()}`);
@@ -130,14 +143,26 @@ export const patch = app => (req, res) => {
 
             doc.modified = Date.now();
             doc.save().then(() => {
-                res.json({
-                    code: doc.code,
-                    name: doc.name,
-                    category: doc.category,
+                const transaction = new Transaction({
+                    transactionType: 'ADJUSTMENT',
+                    itemCode: doc.code,
                     quantity: doc.quantity,
-                    price: doc.price,
-                    created: doc.created,
-                    modified: doc.modified
+                    price: doc.price
+                });
+
+                transaction.save().then(() => {
+                    res.json({
+                        code: doc.code,
+                        name: doc.name,
+                        category: doc.category,
+                        quantity: doc.quantity,
+                        price: doc.price,
+                        created: doc.created,
+                        modified: doc.modified
+                    });
+                }).catch(err => {
+                    app.get('logger').error(`${req.url} - ${err.toString()}`);
+                    e.serverErr(res);
                 });
             });
         } else {
@@ -151,12 +176,25 @@ export const patch = app => (req, res) => {
 
 
 export const remove = app => (req, res) => {
-    const query = Item.remove({code: req.params.code});
+    let data = null;
+    const query = Item.findOneAndRemove({code: req.params.code});
     const promise = query.exec();
 
     promise.then(doc => {
-        if(doc.result.n > 0) {
-            res.status(status.NOT_CONTENT).json();
+        if(doc) {
+            const transaction = new Transaction({
+                transactionType: 'REMOVAL',
+                itemCode: doc.code,
+                quantity: doc.quantity,
+                price: doc.price
+            });
+
+            transaction.save().then(() => {
+                res.status(status.NOT_CONTENT).json();
+            }).catch(err => {
+                app.get('logger').error(`${req.url} - ${err.toString()}`);
+                e.serverErr(res);
+            });
         } else {
             e.notFound(res);
         }
@@ -174,14 +212,26 @@ export const itemIn = app => (req, res) => {
         if(doc) {
             doc.itemIn(req.body.quantity);
             doc.save().then(() => {
-                res.json({
-                    code: doc.code,
-                    name: doc.name,
-                    category: doc.category,
-                    quantity: doc.quantity,
-                    price: doc.price,
-                    created: doc.created,
-                    modified: doc.modified
+                const transaction = new Transaction({
+                    transactionType: 'INCOMING',
+                    itemCode: doc.code,
+                    quantity: req.body.quantity,
+                    price: doc.price
+                });
+
+                transaction.save().then(() => {
+                    res.json({
+                        code: doc.code,
+                        name: doc.name,
+                        category: doc.category,
+                        quantity: doc.quantity,
+                        price: doc.price,
+                        created: doc.created,
+                        modified: doc.modified
+                    });
+                }).catch(err => {
+                    app.get('logger').error(`${req.url} - ${err.toString()}`);
+                    e.serverErr(res);
                 });
             });
         } else {
@@ -205,14 +255,26 @@ export const itemOut = app => (req, res) => {
         if(doc) {
             doc.itemOut(req.body.quantity);
             doc.save().then(() => {
-                res.json({
-                    code: doc.code,
-                    name: doc.name,
-                    category: doc.category,
-                    quantity: doc.quantity,
-                    price: doc.price,
-                    created: doc.created,
-                    modified: doc.modified
+                const transaction = new Transaction({
+                    transactionType: 'OUTGOING',
+                    itemCode: doc.code,
+                    quantity: req.body.quantity,
+                    price: doc.price
+                });
+
+                transaction.save().then(() => {
+                    res.json({
+                        code: doc.code,
+                        name: doc.name,
+                        category: doc.category,
+                        quantity: doc.quantity,
+                        price: doc.price,
+                        created: doc.created,
+                        modified: doc.modified
+                    });
+                }).catch(err => {
+                    app.get('logger').error(`${req.url} - ${err.toString()}`);
+                    e.serverErr(res);
                 });
             });
         } else {

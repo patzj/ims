@@ -11,7 +11,7 @@ const schema = mongoose.Schema({
     transactionType: {
         type: String,
         required: true,
-        enum: ['IN', 'OUT', 'ADJUST', 'DELETE']
+        enum: ['INCOMING', 'OUTGOING', 'ADJUSTMENT', 'REMOVAL']
     },
     itemCode: {
         type: String,
