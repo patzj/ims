@@ -28,28 +28,33 @@ export const getOne = app => (req, res) => {
 export const getAll = app => (req, res) => {
     let query = null;
     if(req.query.i && req.query.d) { // itemCode and transactionDate
-        date = extractDate(req.query.d);
+        const d = extractDate(req.query.d);
         query = Transaction.find().and([
             {itemCode: req.query.i},
             {
                 transactionDate: {
-                    '$gte': new Date(d[0], d[1], d[2]),
-                    '$lt': new Date(d[0], d[1], d[2] + 1)
+                    '$gte': new Date(d[0], d[1] - 1, d[2]),
+                    '$lt': new Date(d[0], d[1] - 1, d[2] + 1)
                 }
             }
         ]);
     } else if(req.query.i) { // itemCode
         query = Transaction.find({itemCode: req.query.i});
     } else if(req.query.d) { // transactionDate
-        date = extractDate(req.query.d);
+        const d = extractDate(req.query.d);
+        console.log(d);
         query = Transaction.find({
             transactionDate: {
-                '$gte': new Date(d[0], d[1], d[2]),
-                '$lt': new Date(d[0], d[1], d[2] + 1)
+                '$gte': new Date(d[0], d[1] - 1, d[2]),
+                '$lt': new Date(d[0], d[1] - 1, d[2] + 1)
             }
         });
     } else {
         query = Transaction.find();
+    }
+
+    if(req.query.t) { // transactionType
+        query = query.and({transactionType: req.query.t});
     }
 
     const promise = query.exec();
@@ -83,12 +88,12 @@ export const post = app => (req, res) => {
     transaction.isNew = true;
     transaction.save().then(() => {
         res.status(status.CREATED).json({
-            transactionId: doc.transactionId,
-            transactionType: doc.transactionType,
-            itemCode: doc.itemCode,
-            quantity: doc.quantity,
-            price: doc.price,
-            transactionDate: doc.transactionDate
+            transactionId: transaction.transactionId,
+            transactionType: transaction.transactionType,
+            itemCode: transaction.itemCode,
+            quantity: transaction.quantity,
+            price: transaction.price,
+            transactionDate: transaction.transactionDate
         });
     }).catch(err => {
         app.get('logger').error(`${req.url} - ${err.toString()}`);
