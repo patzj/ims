@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import config from '../config';
-import { error as e } from '../utils/response-utils';
+import { error as e } from '../utils/response-util';
 
 const logAccess = (app, req, decoded) => {
     app.get('logger')
@@ -19,9 +19,8 @@ export const accessChecker = app => (req, res, next) => {
                 config().JWT.SECRET,
                 (err, decoded) => {
                     if(err) {
-                        app.get('winston')
-                            .error(`${req.url} - ${err.toString()}`);
-                        e.serverErr(res);
+                        logUnauthorized(app, req);
+                        e.forbidden(res);
                     } else if(decoded) {
                         // only system admin have full access User APIs
                         if((req.url.indexOf('users') > -1 ||
