@@ -36,3 +36,39 @@ $default_bg_color: rgb(0, 197, 144);
     }
 
 }
+
+nav {
+
+    ul {
+        font-weight: bold;
+    }
+
+}
+
+
+.nav-tabs {
+    text-align: center;
+
+    li {
+        display: inline-block;
+        float: none;
+
+        a {
+            color: $default_bg_color;
+        }
+
+        span {
+            margin-right: 6px;
+        }
+
+    }
+
+    li.active {
+
+        a:link, a:visited {
+            color: $default_bg_color / 1.2;
+        }
+
+    }
+
+}
