@@ -45,6 +45,9 @@ nav {
 
 }
 
+nav {
+    margin-top: 10px;
+}
 
 .nav-tabs {
     text-align: center;
@@ -69,6 +72,30 @@ nav {
             color: $default_bg_color / 1.2;
         }
 
+    }
+
+}
+
+#items-table_filter input, #transactions-table_filter input {
+    border: 1px solid #777;
+    border-radius: 5px;
+}
+
+#items-table_wrapper select, #transactions-table_wrapper select {
+    background-color: #fff;
+    border: 1px solid #777;
+    border-radius: 5px;
+}
+
+.current{
+    background: #eee !important;
+    font-weight: bold !important;
+}
+
+table {
+
+    .btn-default {
+        background: #eee !important;
     }
 
 }
