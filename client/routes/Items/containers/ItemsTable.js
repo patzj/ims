@@ -1,7 +1,16 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import ItemInForm from '../components/ItemInForm';
+import ItemOutForm from '../components/ItemOutForm';
+import ItemDeletePrompt from '../components/ItemDeletePrompt';
 import { Modal, ModalHeader, ModalBody } from '../../../components/Modal';
+import { setItem, setItemId, getItem } from '../../../actions/items-action';
 
 export class ItemsTable extends React.Component {
+    componentDidUpdate() {
+        $('#items-table').DataTable().ajax.reload();
+    }
+
     componentDidMount() {
         $('#items-table').DataTable({
             ajax: {
@@ -21,21 +30,47 @@ export class ItemsTable extends React.Component {
                 {
                     data: null,
                     render: function(data) {
-                        return '<button class="btn btn-success btn-xs in-item-btn" data-toggle="modal" data-target="#in-item-modal">' +
+                        return '<button class="btn btn-success btn-xs in-item-btn">' +
                             '<span class="glyphicon glyphicon-log-in"></span>' +
+                            '<input type="hidden" value="' + data.code + '" />' +
                         '</button>' +
-                        '<button class="btn btn-warning btn-xs">' +
+                        '<button class="btn btn-warning btn-xs out-item-btn">' +
                             '<span class="glyphicon glyphicon-log-out"></span>' +
+                            '<input type="hidden" value="' + data.code + '" />' +
                         '</button>' +
                         '<button class="btn btn-default btn-xs">' +
                             '<span class="glyphicon glyphicon-pencil"></span>' +
+                            '<input type="hidden" value="' + data.code + '" />' +
                         '</button>' +
-                        '<button class="btn btn-danger btn-xs">' +
+                        '<button class="btn btn-danger btn-xs delete-item-btn">' +
                             '<span class="glyphicon glyphicon-remove"></span>' +
+                            '<input type="hidden" value="' + data.code + '" />' +
                         '</button>';
                     }
                 }
             ]
+        });
+
+        const getItem = id => {
+            this.props.getItem(id);
+        };
+
+        $('#items-table tbody').on('click', 'button.in-item-btn', function() {
+            const code = $(this).find('input').val();
+            getItem(code);
+            $('#in-item-modal').modal('show');
+        });
+
+        $('#items-table tbody').on('click', 'button.out-item-btn', function() {
+            const code = $(this).find('input').val();
+            getItem(code);
+            $('#out-item-modal').modal('show');
+        });
+
+        $('#items-table tbody').on('click', 'button.delete-item-btn', function() {
+            const code = $(this).find('input').val();
+            getItem(code);
+            $('#delete-item-modal').modal('show');
         });
     }
 
@@ -54,16 +89,51 @@ export class ItemsTable extends React.Component {
                         </tr>
                     </thead>
                 </table>
-                <Modal id="in-item-modal">
+                <Modal id="in-item-modal" size="modal-sm">
                     <ModalHeader>
                         <span className="close" data-dismiss="modal">&times;</span>
-                        <h3>Incoming</h3>
+                        <h4>{this.props.currentItem.name}</h4>
                     </ModalHeader>
-                    <ModalBody></ModalBody>
+                    <ModalBody>
+                        <ItemInForm />
+                    </ModalBody>
+                </Modal>
+                <Modal id="out-item-modal" size="modal-sm">
+                    <ModalHeader>
+                        <span className="close" data-dismiss="modal">&times;</span>
+                        <h4>{this.props.currentItem.name}</h4>
+                    </ModalHeader>
+                    <ModalBody>
+                        <ItemOutForm />
+                    </ModalBody>
+                </Modal>
+                <Modal id="delete-item-modal" size="modal-sm">
+                    <ModalHeader>
+                        <span className="close" data-dismiss="modal">&times;</span>
+                        <h4>{this.props.currentItem.name}</h4>
+                    </ModalHeader>
+                    <ModalBody>
+                        <ItemDeletePrompt />
+                    </ModalBody>
                 </Modal>
             </div>
         );
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        currentItem: state.items.currentItem
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setItem: obj => dispatch(setItem(obj)),
+        getItem: id => dispatch(getItem(id))
+    };
+};
+
+ItemsTable = connect(mapStateToProps, mapDispatchToProps)(ItemsTable);
 
 export default ItemsTable;

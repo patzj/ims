@@ -87,9 +87,13 @@ nav {
     border-radius: 5px;
 }
 
-.current{
+.current {
     background: #eee !important;
     font-weight: bold !important;
+}
+
+.paginate_button:not(.current):not(.disabled):hover {
+    background: #333 !important;
 }
 
 table {
