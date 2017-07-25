@@ -74,3 +74,23 @@ export const itemOut = (code, e) => dispatch => {
         }
     });
 };
+
+export const itemDelete = code => dispatch => {
+    axios.delete(`/api/items/${code}`, {
+        headers: {
+            'x-access-token': JSON.parse(localStorage.getItem('ims-user')).token
+        }
+    }).then(res => {
+        if(res) {
+            dispatch({
+                type: 'SET_CURRENT_ITEM',
+                payload: {}
+            });
+            $('#delete-item-modal').modal('hide');
+        }
+    }).catch(err => {
+        if(err.response && err.response.status >= 400) {
+            console.log(err.response.data.message);
+        }
+    });
+};
