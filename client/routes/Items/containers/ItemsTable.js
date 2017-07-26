@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ItemInForm from '../components/ItemInForm';
 import ItemOutForm from '../components/ItemOutForm';
+import { EditItemForm } from '../components/ItemForm';
 import ItemDeletePrompt from '../components/ItemDeletePrompt';
 import { Modal, ModalHeader, ModalBody } from '../../../components/Modal';
 import { setItem, setItemId, getItem } from '../../../actions/items-action';
@@ -38,7 +39,7 @@ export class ItemsTable extends React.Component {
                             '<span class="glyphicon glyphicon-log-out"></span>' +
                             '<input type="hidden" value="' + data.code + '" />' +
                         '</button>' +
-                        '<button class="btn btn-default btn-xs">' +
+                        '<button class="btn btn-default btn-xs edit-item-btn">' +
                             '<span class="glyphicon glyphicon-pencil"></span>' +
                             '<input type="hidden" value="' + data.code + '" />' +
                         '</button>' +
@@ -65,6 +66,12 @@ export class ItemsTable extends React.Component {
             const code = $(this).find('input').val();
             getItem(code);
             $('#out-item-modal').modal('show');
+        });
+
+        $('#items-table tbody').on('click', 'button.edit-item-btn', function() {
+            const code = $(this).find('input').val();
+            getItem(code);
+            setTimeout(function() {$('#edit-item-modal').modal('show');}, 1000);
         });
 
         $('#items-table tbody').on('click', 'button.delete-item-btn', function() {
@@ -105,6 +112,15 @@ export class ItemsTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         <ItemOutForm />
+                    </ModalBody>
+                </Modal>
+                <Modal id="edit-item-modal" size="modal-sm">
+                    <ModalHeader>
+                        <span className="close" data-dismiss="modal">&times;</span>
+                        <h4>{this.props.currentItem.name}</h4>
+                    </ModalHeader>
+                    <ModalBody>
+                        <EditItemForm />
                     </ModalBody>
                 </Modal>
                 <Modal id="delete-item-modal" size="modal-sm">

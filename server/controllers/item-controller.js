@@ -123,48 +123,48 @@ export const patch = app => (req, res) => {
 
             if(data.name) {
                 const query2 = Item.findOne({name: data.name});
-                const promise2 = query.exec();
+                const promise2 = query2.exec();
 
                 promise2.then(item => {
-                    if(item &&
-                        item.name.toLowerCase() !== doc.name.toLowerCase()) {
+                    if(item && item.code !== doc.code) {
                         e.alreadyExists(res)(data.name);
+                    } else {
+                        for(let key in data) {
+                            doc[key] = data[key]
+                        }
+
+                        doc.modified = Date.now();
+                        doc.save().then(() => {
+                            const transaction = new Transaction({
+                                transactionType: 'ADJUSTMENT',
+                                itemCode: doc.code,
+                                quantity: doc.quantity,
+                                price: doc.price
+                            });
+
+                            transaction.save().then(() => {
+                                res.json({
+                                    code: doc.code,
+                                    name: doc.name,
+                                    category: doc.category,
+                                    quantity: doc.quantity,
+                                    price: doc.price,
+                                    created: doc.created,
+                                    modified: doc.modified
+                                });
+                            }).catch(err => {
+                                app.get('logger').error(`${req.url} - ${err.toString()}`);
+                                e.serverErr(res);
+                            });
+                        });
                     }
                 }).catch(err => {
                     app.get('logger')
                         .error(`${req.url} - ${err.toString()}`);
                     e.serverErr(res);
+                    return;
                 });
             }
-
-            for(let key in data) {
-                doc[key] = data[key]
-            }
-
-            doc.modified = Date.now();
-            doc.save().then(() => {
-                const transaction = new Transaction({
-                    transactionType: 'ADJUSTMENT',
-                    itemCode: doc.code,
-                    quantity: doc.quantity,
-                    price: doc.price
-                });
-
-                transaction.save().then(() => {
-                    res.json({
-                        code: doc.code,
-                        name: doc.name,
-                        category: doc.category,
-                        quantity: doc.quantity,
-                        price: doc.price,
-                        created: doc.created,
-                        modified: doc.modified
-                    });
-                }).catch(err => {
-                    app.get('logger').error(`${req.url} - ${err.toString()}`);
-                    e.serverErr(res);
-                });
-            });
         } else {
             e.notFound(res);
         }

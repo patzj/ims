@@ -5,6 +5,7 @@ export const httpStatus = {
     BAD_REQUEST: 400,
     FORBIDDEN: 403,
     NOT_FOUND: 404,
+    CONFLICT: 409,
     UNP_ENTITY: 422,
     SERVER_ERR: 500
 };
@@ -26,7 +27,7 @@ export const error = {
         });
     },
     alreadyExists: res => item => {
-        res.json({
+        res.status(httpStatus.CONFLICT).json({
             message: `${item} already exists`
         });
     },

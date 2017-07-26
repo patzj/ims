@@ -94,3 +94,59 @@ export const itemDelete = code => dispatch => {
         }
     });
 };
+
+export const itemNew = e => dispatch => {
+    e.preventDefault();
+    const data = e.target;
+    axios.post('/api/items', {
+        name: data.name.value,
+        category: data.category.value.split(','),
+        quantity: parseInt(data.quantity.value),
+        price: parseFloat(data.price.value)
+    },
+    {
+        headers: {
+            'x-access-token': JSON.parse(localStorage.getItem('ims-user')).token
+        }
+    }).then(res => {
+        if(res) {
+            dispatch({
+                type: 'SET_CURRENT_ITEM',
+                payload: {}
+            });
+            $('#new-item-modal').modal('hide');
+        }
+    }).catch(err => {
+        if(err.response && err.response.status >= 400) {
+            console.log(err.response.data.message);
+        }
+    });
+};
+
+export const itemEdit = e => (dispatch, getState) => {
+    e.preventDefault();
+    console.log(getState().items.currentItem);
+    const data = {
+        name: e.target.name.value,
+        category: e.target.category.value.split(','),
+        quantity: parseInt(e.target.quantity.value),
+        price: parseFloat(e.target.price.value)
+    };
+    axios.patch(`/api/items/${getState().items.currentItem.code}`, data, {
+        headers: {
+            'x-access-token': JSON.parse(localStorage.getItem('ims-user')).token
+        }
+    }).then(res => {
+        if(res) {
+            dispatch({
+                type: 'SET_CURRENT_ITEM',
+                payload: {}
+            });
+        }
+        $('#edit-item-modal').modal('hide');
+    }).catch(err => {
+        if(err.response && err.response.status >= 400) {
+            console.log(err.response.data.message);
+        }
+    });
+};
