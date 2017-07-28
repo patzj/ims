@@ -16,6 +16,18 @@ export class ItemForm extends React.Component {
         this.refs.price.value = price;
     }
 
+    handleInt(e) {
+        if((e.keyCode < 58 && e.keyCode > 47)) {
+            return e.value;
+        }
+    }
+
+    handleFloat(e) {
+        if((e.keyCode < 58 && e.keyCode > 47) || e.keyCode === 190) {
+            return e.value;
+        }
+    }
+
     render() {
         return (
             <form className="form-horizontal" method="post" onSubmit={e => this.props.handleSave(e)}>
@@ -48,6 +60,7 @@ export class ItemForm extends React.Component {
                             name="quantity"
                             min="0"
                             ref="quantity"
+                            onKeyUp={e => this.handleInt(e)}
                         />
                     </div>
                 </div>
@@ -58,7 +71,9 @@ export class ItemForm extends React.Component {
                             className="form-control"
                             name="price"
                             min="0"
+                            step="0.01"
                             ref="price"
+                            onKeyUp={e => this.handleFloat(e)}
                         />
                     </div>
                 </div>
