@@ -1,62 +1,96 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { itemNew, itemEdit } from '../../../actions/items-action';
+import { closeItemModal } from '../../../actions/modal-action';
 
-export const ItemForm = ({handleSave, handleCancel, currentItem}) => {
-    return (
-        <form className="form-horizontal" method="post" onSubmit={e => handleSave(e)}>
-            <div className="row form-group">
-                <label htmlFor="name" className="control-label col-md-4">Name</label>
-                <div className="col-md-8">
-                    <input type="text" className="form-control" name="name" defaultValue={typeof(currentItem) !== 'undefined' && typeof(currentItem.name) !== 'undefined' ? currentItem.name : ''} required />
+export class ItemForm extends React.Component {
+    componentDidUpdate(prevProps, prevState) {
+        const name = typeof(this.props.currentItem) !== 'undefined' && typeof(this.props.currentItem.name) !== 'undefined' ? this.props.currentItem.name : '';
+        const category = typeof(this.props.currentItem) !== 'undefined' && typeof(this.props.currentItem.category) !== 'undefined' ? this.props.currentItem.category : '';
+        const quantity = typeof(this.props.currentItem) !== 'undefined' && typeof(this.props.currentItem.quantity) !== 'undefined' ? this.props.currentItem.quantity : 0;
+        const price = typeof(this.props.currentItem) !== 'undefined' && typeof(this.props.currentItem.price) !== 'undefined' ? this.props.currentItem.price : 0;
+
+        this.refs.name.value = name;
+        this.refs.category.value = category;
+        this.refs.quantity.value = quantity;
+        this.refs.price.value = price;
+    }
+
+    render() {
+        return (
+            <form className="form-horizontal" method="post" onSubmit={e => this.props.handleSave(e)}>
+                <div className="row form-group">
+                    <label htmlFor="name" className="control-label col-md-4">Name</label>
+                    <div className="col-md-8">
+                        <input type="text"
+                            className="form-control"
+                            name="name"
+                            ref="name"
+                            required
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="row form-group">
-                <label htmlFor="category" className="control-label col-md-4">Category</label>
-                <div className="col-md-8">
-                    <input type="text" className="form-control" name="category" defaultValue={typeof(currentItem) !== 'undefined' && typeof(currentItem.category) !== 'undefined' ? currentItem.category : ''} />
+                <div className="row form-group">
+                    <label htmlFor="category" className="control-label col-md-4">Category</label>
+                    <div className="col-md-8">
+                        <input type="text"
+                            className="form-control"
+                            name="category"
+                            ref="category"
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="row form-group">
-                <label htmlFor="category" className="control-label col-md-4">Quantity</label>
-                <div className="col-md-8">
-                    <input type="number" className="form-control" name="quantity" min="0" defaultValue={typeof(currentItem) !== 'undefined' && typeof(currentItem.quantity) !== 'undefined' ? currentItem.quantity : 0} />
+                <div className="row form-group">
+                    <label htmlFor="category" className="control-label col-md-4">Quantity</label>
+                    <div className="col-md-8">
+                        <input type="number"
+                            className="form-control"
+                            name="quantity"
+                            min="0"
+                            ref="quantity"
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="row form-group">
-                <label htmlFor="category" className="control-label col-md-4">Price</label>
-                <div className="col-md-8">
-                    <input type="number" className="form-control" name="price" min="0" defaultValue={typeof(currentItem) !== 'undefined' && typeof(currentItem.price) !== 'undefined' ? currentItem.price : 0} />
+                <div className="row form-group">
+                    <label htmlFor="category" className="control-label col-md-4">Price</label>
+                    <div className="col-md-8">
+                        <input type="number"
+                            className="form-control"
+                            name="price"
+                            min="0"
+                            ref="price"
+                        />
+                    </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="col-md-4 col-md-offset-1 text-center">
-                    <button type="submit" className="btn btn-success">
-                        <span className="glyphicon glyphicon-save"></span>&nbsp;
-                        Save
-                    </button>
+                <div className="row">
+                    <div className="col-md-4 col-md-offset-1 text-center">
+                        <button type="submit" className="btn btn-success">
+                            <span className="glyphicon glyphicon-save"></span>&nbsp;
+                            Save
+                        </button>
+                    </div>
+                    <div className="col-md-4 col-md-offset-1 text-center">
+                        <button type="button" className="btn btn-warning" onClick={() => this.props.handleCancel()}>
+                            <span className="glyphicon glyphicon-ban-circle"></span>&nbsp;
+                            Cancel
+                        </button>
+                    </div>
                 </div>
-                <div className="col-md-4 col-md-offset-1 text-center">
-                    <button type="button" className="btn btn-warning" onClick={() => handleCancel()}>
-                        <span className="glyphicon glyphicon-ban-circle"></span>&nbsp;
-                        Cancel
-                    </button>
-                </div>
-            </div>
-        </form>
-    );
+            </form>
+        );
+    }
 };
 
 let mapStateToProps = state => {
     return {
-        currentItem: {}
+        currentItem: state.items.currentItem
     };
 };
 
 let mapDispatchToProps = dispatch => {
     return {
         handleSave: e => dispatch(itemNew(e)),
-        handleCancel: () => $('#new-item-modal').modal('hide')
+        handleCancel: () => dispatch(closeItemModal('#new-item-modal'))
     };
 };
 
@@ -71,7 +105,7 @@ mapStateToProps = state => {
 mapDispatchToProps = (dispatch) => {
     return {
         handleSave: e => dispatch(itemEdit(e)),
-        handleCancel: () => $('#edit-item-modal').modal('hide')
+        handleCancel: () => dispatch(closeItemModal('#edit-item-modal'))
     };
 };
 

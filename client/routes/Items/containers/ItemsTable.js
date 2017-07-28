@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ItemInForm from '../components/ItemInForm';
 import ItemOutForm from '../components/ItemOutForm';
-import { EditItemForm } from '../components/ItemForm';
+import { EditItemForm, NewItemForm } from '../components/ItemForm';
 import ItemDeletePrompt from '../components/ItemDeletePrompt';
 import { Modal, ModalHeader, ModalBody } from '../../../components/Modal';
 import { setItem, setItemId, getItem } from '../../../actions/items-action';
+import { closeItemModal } from '../../../actions/modal-action';
 
 export class ItemsTable extends React.Component {
     componentDidUpdate() {
@@ -71,7 +72,7 @@ export class ItemsTable extends React.Component {
         $('#items-table tbody').on('click', 'button.edit-item-btn', function() {
             const code = $(this).find('input').val();
             getItem(code);
-            setTimeout(function() {$('#edit-item-modal').modal('show');}, 1000);
+            $('#edit-item-modal').modal('show');
         });
 
         $('#items-table tbody').on('click', 'button.delete-item-btn', function() {
@@ -98,7 +99,7 @@ export class ItemsTable extends React.Component {
                 </table>
                 <Modal id="in-item-modal" size="modal-sm">
                     <ModalHeader>
-                        <span className="close" data-dismiss="modal">&times;</span>
+                        <span className="close" onClick={() => this.props.closeItemModal('#in-item-modal')}>&times;</span>
                         <h4>{this.props.currentItem.name}</h4>
                     </ModalHeader>
                     <ModalBody>
@@ -107,7 +108,7 @@ export class ItemsTable extends React.Component {
                 </Modal>
                 <Modal id="out-item-modal" size="modal-sm">
                     <ModalHeader>
-                        <span className="close" data-dismiss="modal">&times;</span>
+                        <span className="close" onClick={() => this.props.closeItemModal('#out-item-modal')}>&times;</span>
                         <h4>{this.props.currentItem.name}</h4>
                     </ModalHeader>
                     <ModalBody>
@@ -116,7 +117,7 @@ export class ItemsTable extends React.Component {
                 </Modal>
                 <Modal id="edit-item-modal" size="modal-sm">
                     <ModalHeader>
-                        <span className="close" data-dismiss="modal">&times;</span>
+                        <span className="close" onClick={() => this.props.closeItemModal('#edit-item-modal')}>&times;</span>
                         <h4>{this.props.currentItem.name}</h4>
                     </ModalHeader>
                     <ModalBody>
@@ -125,11 +126,20 @@ export class ItemsTable extends React.Component {
                 </Modal>
                 <Modal id="delete-item-modal" size="modal-sm">
                     <ModalHeader>
-                        <span className="close" data-dismiss="modal">&times;</span>
+                        <span className="close" onClick={() => this.props.closeItemModal('#delete-item-modal')}>&times;</span>
                         <h4>{this.props.currentItem.name}</h4>
                     </ModalHeader>
                     <ModalBody>
                         <ItemDeletePrompt />
+                    </ModalBody>
+                </Modal>
+                <Modal id="new-item-modal" size="modal-sm">
+                    <ModalHeader>
+                        <span className="close" onClick={() => this.props.closeItemModal('#new-item-modal')}>&times;</span>
+                        <h4>New Item</h4>
+                    </ModalHeader>
+                    <ModalBody>
+                        <NewItemForm />
                     </ModalBody>
                 </Modal>
             </div>
@@ -146,7 +156,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setItem: obj => dispatch(setItem(obj)),
-        getItem: id => dispatch(getItem(id))
+        getItem: id => dispatch(getItem(id)),
+        closeItemModal: modal => dispatch(closeItemModal(modal))
     };
 };
 

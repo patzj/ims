@@ -125,7 +125,6 @@ export const itemNew = e => dispatch => {
 
 export const itemEdit = e => (dispatch, getState) => {
     e.preventDefault();
-    console.log(getState().items.currentItem);
     const data = {
         name: e.target.name.value,
         category: e.target.category.value.split(','),
