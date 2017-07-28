@@ -18,7 +18,7 @@ export class NavBar extends React.Component {
     render() {
         return (
             <nav className="row">
-                <ul ref="links" className="nav nav-tabs col-xs-8 col-xs-offset-2">
+                <ul ref="links" className="nav nav-tabs col-xs-10 col-xs-offset-1">
                     <li className="active"><Link to="/items">
                         <span className="glyphicon glyphicon-object-align-bottom"></span>
                         Items

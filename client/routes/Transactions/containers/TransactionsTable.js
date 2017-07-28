@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 export class TransactionsTable extends React.Component {
     componentDidMount() {
@@ -9,8 +10,16 @@ export class TransactionsTable extends React.Component {
                 beforeSend: function(req) {
                     const token = JSON.parse(localStorage.getItem('ims-user')).token;
                     req.setRequestHeader('x-access-token', token);
-                }
+                },
+                error: function(xhr, error, thrown) {
+                    if(xhr.status === 403) {
+                        this.props.deAuthenticate();
+                    }
+                }.bind(this)
             },
+            order: [
+                [4, 'des']
+            ],
             columns: [
                 {data: 'transactionType'},
                 {data: 'itemCode'},
@@ -46,5 +55,19 @@ export class TransactionsTable extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        deAuthenticate: () => dispatch(deAuthenticate())
+    };
+};
+
+TransactionsTable = connect(mapStateToProps, mapDispatchToProps)(TransactionsTable);
 
 export default TransactionsTable;
