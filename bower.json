@@ -2,12 +2,26 @@
     "name": "ims",
     "version": "1.0.0",
     "dependencies": {
-        "bootstrap": "latest"
+        "bootstrap": "latest",
+        "datatables.net": "latest",
+        "datatables.net-dt": "latest"
     },
     "install": {
         "path": "build/assets/",
+        "ignore": [".bower.json", "bower.json", "License.txt","Readme.md"],
         "sources": {
-            "bootstrap": "bower_components/bootstrap/dist/**"
+            "bootstrap": "bower_components/bootstrap/dist/**",
+            "datatables.net": "bower_components/datatables.net/js/**",
+            "datatables.net-dt": {
+                "mapping": [
+                    {
+                        "bower_components/datatables.net-dt/css/**": "css/"
+                    },
+                    {
+                        "bower_components/datatables.net-dt/images/**": "images/"
+                    }
+                ]
+            }
         }
     }
 }
