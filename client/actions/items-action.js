@@ -16,9 +16,22 @@ export const getItem = id => dispatch => {
         if(res) {
             dispatch(setItem(res.data));
         }
+        dispatch({
+            type: 'ITEM_ERROR',
+            payload: ''
+        });
     }).catch(err => {
         if(err.response && err.response.status >= 400) {
             console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'ITEM_ERROR',
+                    payload: err.response.data.message
+                });
+            }
         }
     });
 };
@@ -40,11 +53,24 @@ export const itemIn = (code, e) => dispatch => {
                 type: 'SET_CURRENT_ITEM',
                 payload: {}
             });
-            $('#in-item-modal').modal('hide');
         }
+        dispatch({
+            type: 'ITEM_ERROR',
+            payload: ''
+        });
+        $('#in-item-modal').modal('hide');
     }).catch(err => {
         if(err.response && err.response.status >= 400) {
             console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'ITEM_ERROR',
+                    payload: err.response.data.message
+                });
+            }
         }
     });
 };
@@ -66,11 +92,24 @@ export const itemOut = (code, e) => dispatch => {
                 type: 'SET_CURRENT_ITEM',
                 payload: {}
             });
-            $('#out-item-modal').modal('hide');
         }
+        dispatch({
+            type: 'ITEM_ERROR',
+            payload: ''
+        });
+        $('#out-item-modal').modal('hide');
     }).catch(err => {
         if(err.response && err.response.status >= 400) {
             console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'ITEM_ERROR',
+                    payload: err.response.data.message
+                });
+            }
         }
     });
 };
@@ -86,11 +125,24 @@ export const itemDelete = code => dispatch => {
                 type: 'SET_CURRENT_ITEM',
                 payload: {}
             });
-            $('#delete-item-modal').modal('hide');
         }
+        dispatch({
+            type: 'ITEM_ERROR',
+            payload: ''
+        });
+        $('#delete-item-modal').modal('hide');
     }).catch(err => {
         if(err.response && err.response.status >= 400) {
             console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'ITEM_ERROR',
+                    payload: err.response.data.message
+                });
+            }
         }
     });
 };
@@ -114,11 +166,24 @@ export const itemNew = e => dispatch => {
                 type: 'SET_CURRENT_ITEM',
                 payload: {}
             });
-            $('#new-item-modal').modal('hide');
         }
+        dispatch({
+            type: 'ITEM_ERROR',
+            payload: ''
+        });
+        $('#new-item-modal').modal('hide');
     }).catch(err => {
         if(err.response && err.response.status >= 400) {
             console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'ITEM_ERROR',
+                    payload: err.response.data.message
+                });
+            }
         }
     });
 };
@@ -142,10 +207,23 @@ export const itemEdit = e => (dispatch, getState) => {
                 payload: {}
             });
         }
+        dispatch({
+            type: 'ITEM_ERROR',
+            payload: ''
+        });
         $('#edit-item-modal').modal('hide');
     }).catch(err => {
         if(err.response && err.response.status >= 400) {
             console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'ITEM_ERROR',
+                    payload: err.response.data.message
+                });
+            }
         }
     });
 };

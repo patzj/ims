@@ -3,7 +3,7 @@ export const config = () => {
         DATABASE: 'mongodb://localhost:27017/ims-dev',
         JWT: {
             SECRET: 'super-secret',
-            EXPIRATION: '8h'
+            EXPIRATION: '1h'
         },
         PORT: 3000
     };

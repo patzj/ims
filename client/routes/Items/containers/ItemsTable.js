@@ -7,6 +7,7 @@ import ItemDeletePrompt from '../components/ItemDeletePrompt';
 import { Modal, ModalHeader, ModalBody } from '../../../components/Modal';
 import { setItem, setItemId, getItem } from '../../../actions/items-action';
 import { closeItemModal } from '../../../actions/modal-action';
+import ItemError from '../components/ItemError';
 
 export class ItemsTable extends React.Component {
     componentDidUpdate() {
@@ -104,6 +105,7 @@ export class ItemsTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         <ItemInForm />
+                        <ItemError />
                     </ModalBody>
                 </Modal>
                 <Modal id="out-item-modal" size="modal-sm">
@@ -113,6 +115,7 @@ export class ItemsTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         <ItemOutForm />
+                        <ItemError />
                     </ModalBody>
                 </Modal>
                 <Modal id="edit-item-modal" size="modal-sm">
@@ -122,6 +125,7 @@ export class ItemsTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         <EditItemForm />
+                        <ItemError />
                     </ModalBody>
                 </Modal>
                 <Modal id="delete-item-modal" size="modal-sm">
@@ -131,6 +135,7 @@ export class ItemsTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         <ItemDeletePrompt />
+                        <ItemError />
                     </ModalBody>
                 </Modal>
                 <Modal id="new-item-modal" size="modal-sm">
@@ -140,6 +145,7 @@ export class ItemsTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         <NewItemForm />
+                        <ItemError />
                     </ModalBody>
                 </Modal>
             </div>

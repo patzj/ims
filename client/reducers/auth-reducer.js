@@ -16,6 +16,11 @@ export const authReducer = (state=initialState, action) => {
                 ...state,
                 authError: action.payload
             };
+        case 'DE_AUTH':
+            return {
+                ...state,
+                isAuthenticated: false
+            }
         default:
             return state;
     }
