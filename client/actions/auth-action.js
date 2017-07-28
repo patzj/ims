@@ -32,3 +32,9 @@ export const reAuthenticate = () => {
         type: 'AUTH_SUCCESS'
     };
 };
+
+export const deAuthenticate = () => {
+    return {
+        type: 'DE_AUTH'
+    };
+};

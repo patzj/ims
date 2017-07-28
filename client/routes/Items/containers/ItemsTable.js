@@ -7,6 +7,7 @@ import ItemDeletePrompt from '../components/ItemDeletePrompt';
 import { Modal, ModalHeader, ModalBody } from '../../../components/Modal';
 import { setItem, setItemId, getItem } from '../../../actions/items-action';
 import { closeItemModal } from '../../../actions/modal-action';
+import { deAuthenticate } from '../../../actions/auth-action';
 import ItemError from '../components/ItemError';
 
 export class ItemsTable extends React.Component {
@@ -22,7 +23,12 @@ export class ItemsTable extends React.Component {
                 beforeSend: function(req) {
                     const token = JSON.parse(localStorage.getItem('ims-user')).token;
                     req.setRequestHeader('x-access-token', token);
-                }
+                },
+                error: function(xhr, error, thrown) {
+                    if(xhr.status === 403) {
+                        this.props.deAuthenticate();
+                    };
+                }.bind(this)
             },
             columns: [
                 {data: 'name'},
@@ -163,7 +169,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setItem: obj => dispatch(setItem(obj)),
         getItem: id => dispatch(getItem(id)),
-        closeItemModal: modal => dispatch(closeItemModal(modal))
+        closeItemModal: modal => dispatch(closeItemModal(modal)),
+        deAuthenticate: () => dispatch(deAuthenticate())
     };
 };
 
