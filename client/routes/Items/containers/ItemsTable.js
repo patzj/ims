@@ -27,7 +27,7 @@ export class ItemsTable extends React.Component {
                 error: function(xhr, error, thrown) {
                     if(xhr.status === 403) {
                         this.props.deAuthenticate();
-                    };
+                    }
                 }.bind(this)
             },
             columns: [

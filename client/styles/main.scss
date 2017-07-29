@@ -76,13 +76,19 @@ nav {
 
 }
 
-#items-table_filter input, #transactions-table_filter input, #logs-table_filter input {
+#items-table_filter input,
+#transactions-table_filter input,
+#logs-table_filter input,
+#user-mgmt-table_filter input {
     border: 1px solid #777;
     border-radius: 5px;
     padding: 2px;
 }
 
-#items-table_wrapper select, #transactions-table_wrapper select, #logs-table_wrapper select {
+#items-table_wrapper select,
+#transactions-table_wrapper select,
+#logs-table_wrapper select,
+#user-mgmt-table_wrapper select {
     background-color: #fff;
     border: 1px solid #777;
     border-radius: 5px;

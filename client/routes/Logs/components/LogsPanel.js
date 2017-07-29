@@ -8,7 +8,7 @@ export const LogsPanel = () => {
             <h2 className="pull-left">Logs</h2>
             <div className="pull-right" style={{marginTop: '20px'}}>
                 <button className="btn btn-success" onClick={() => exportLogs()}>
-                    <span className="glyphicon glyphicon-plus-sign"></span>&nbsp;Export
+                    <span className="glyphicon glyphicon-export"></span>&nbsp;Export
                 </button>
             </div>
             <LogsTable />
