@@ -12,6 +12,7 @@ import itemRoute from './routes/item-route';
 import registrationRoute from './routes/registration-route';
 import transactionRoute from './routes/transaction-route';
 import userRoute from './routes/user-route';
+import logsRoute from './routes/logs-route';
 
 import accessChecker from './middlewares/access-checker';
 import jsonChecker from './middlewares/json-checker';
@@ -58,6 +59,7 @@ itemRoute(app);
 registrationRoute(app);
 transactionRoute(app);
 userRoute(app);
+logsRoute(app);
 
 // Run app
 app.listen(cfg.PORT, () => {

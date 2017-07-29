@@ -36,3 +36,91 @@ $default_bg_color: rgb(0, 197, 144);
     }
 
 }
+
+nav {
+
+    ul {
+        font-weight: bold;
+    }
+
+}
+
+nav {
+    margin-top: 10px;
+}
+
+.nav-tabs {
+    text-align: center;
+
+    li {
+        display: inline-block;
+        float: none;
+
+        a {
+            color: $default_bg_color;
+        }
+
+        span {
+            margin-right: 6px;
+        }
+
+    }
+
+    li.active {
+
+        a:link, a:visited {
+            color: $default_bg_color / 1.2;
+        }
+
+    }
+
+}
+
+#items-table_filter input,
+#transactions-table_filter input,
+#logs-table_filter input,
+#user-mgmt-table_filter input {
+    border: 1px solid #777;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+#items-table_wrapper select,
+#transactions-table_wrapper select,
+#logs-table_wrapper select,
+#user-mgmt-table_wrapper select {
+    background-color: #fff;
+    border: 1px solid #777;
+    border-radius: 5px;
+}
+
+#item-error {
+    margin-top: 15px;
+}
+
+.current {
+    background: #eee !important;
+    font-weight: bold !important;
+}
+
+.paginate_button:not(.current):not(.disabled):hover {
+    background: #333 !important;
+}
+
+table {
+
+    .btn-default {
+        background: #eee !important;
+    }
+
+}
+
+header {
+
+    #user-link {
+        color: #333;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    
+}
