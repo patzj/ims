@@ -9,3 +9,15 @@ export const closeItemModal = modal => dispatch => {
     });
     $(modal).modal('hide');
 };
+
+export const closeUserModal = modal => dispatch => {
+    dispatch({
+        type: 'SET_CURRENT_USER',
+        payload: {}
+    });
+    dispatch({
+        type: 'USER_ERROR',
+        payload: ''
+    });
+    $(modal).modal('hide');
+};

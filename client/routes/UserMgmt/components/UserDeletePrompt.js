@@ -1,16 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { itemDelete } from '../../../actions/items-action';
-import { closeItemModal } from '../../../actions/modal-action';
+import { userDelete } from '../../../actions/user-mgmt-action';
+import { closeUserModal } from '../../../actions/modal-action';
 
-let ItemDeletePrompt = ({currentItem, yes, no}) => {
+let UserDeletePrompt = ({currentUser, yes, no}) => {
     return (
         <div className="row">
             <div className="row text-center">
-                <p>Would you like to delete {currentItem.name}?</p>
+                <p>Would you like to delete {currentUser.username}?</p>
             </div>
             <div className="col-md-6">
-                <button className="btn btn-default btn-small btn-block btn-success" onClick={() => yes(currentItem.code)}>
+                <button className="btn btn-default btn-small btn-block btn-success" onClick={() => yes(currentUser.username)}>
                     <span className="glyphicon glyphicon-ok"></span>&nbsp;
                     Yes
                 </button>
@@ -27,17 +27,17 @@ let ItemDeletePrompt = ({currentItem, yes, no}) => {
 
 const mapStateToProps = (state) => {
     return {
-        currentItem: state.items.currentItem
+        currentUser: state.users.currentUser
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        yes: code => dispatch(itemDelete(code)),
-        no: () => dispatch(closeItemModal('#delete-item-modal'))
+        yes: username => dispatch(userDelete(username)),
+        no: () => dispatch(closeUserModal('#delete-user-modal'))
     };
 };
 
-ItemDeletePrompt = connect(mapStateToProps, mapDispatchToProps)(ItemDeletePrompt);
+UserDeletePrompt = connect(mapStateToProps, mapDispatchToProps)(UserDeletePrompt);
 
-export default ItemDeletePrompt;
+export default UserDeletePrompt;
