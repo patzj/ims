@@ -7,10 +7,12 @@ import Items from '../routes/Items';
 import Transactions from '../routes/Transactions';
 import Logs from '../routes/Logs';
 import UserMgmt from '../routes/UserMgmt';
+import Header from '../containers/Header';
 
 export const Main = () => {
     return (
         <div>
+            <Header />
             <NavBar />
             <Route path="/items" component={Items} />
             <Route path="/transactions" component={Transactions} />

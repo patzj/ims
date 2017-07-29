@@ -4,7 +4,7 @@ export const LogInForm = ({authError, handleSubmit}) => {
     return (
         <div
             id="log-in-form"
-            className="container-fluid jumbotron col-xs-4 col-xs-offset-4 vcenter"
+            className="container-fluid jumbotron col-xs-4 col-xs-offset-3 vcenter"
         >
             <header>
                 <h1>

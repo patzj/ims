@@ -73,6 +73,7 @@ export const itemIn = (code, e) => dispatch => {
             }
         }
     });
+    e.target.quantity.value = "0";
 };
 
 export const itemOut = (code, e) => dispatch => {
@@ -112,6 +113,7 @@ export const itemOut = (code, e) => dispatch => {
             }
         }
     });
+    e.target.quantity.value = "0";
 };
 
 export const itemDelete = code => dispatch => {
