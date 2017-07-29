@@ -133,3 +133,33 @@ export const userEdit = e => (dispatch, getState) => {
         });
     }
 };
+
+export const userDelete = username => dispatch => {
+    axios.delete(`/api/users/${username}`, {
+        headers: {
+            'x-access-token': JSON.parse(localStorage.getItem('ims-user')).token
+        }
+    }).then(res => {
+        if(res) {
+            dispatch(setUser({}));
+        }
+        dispatch({
+            type: 'USER_ERROR',
+            payload: ''
+        });
+        $('#delete-user-modal').modal('hide');
+    }).catch(err => {
+        if(err.response && err.response.status >= 400) {
+            console.log(err.response.data.message);
+
+            if(err.response.status === 403) {
+                dispatch({type: 'DE_AUTH'});
+            } else {
+                dispatch({
+                    type: 'USER_ERROR',
+                    payload: err.response.data.message
+                });
+            }
+        }
+    });
+}

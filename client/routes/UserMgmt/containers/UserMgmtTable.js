@@ -6,6 +6,7 @@ import { closeUserModal } from '../../../actions/modal-action';
 import { deAuthenticate } from '../../../actions/auth-action';
 import { NewUserForm, EditUserForm } from '../components/UserMgmtForm';
 import UserError from '../components/UserError';
+import UserDeletePrompt from '../components/UserDeletePrompt';
 
 export class UserMgmtTable extends React.Component {
     componentDidUpdate() {
@@ -93,12 +94,13 @@ export class UserMgmtTable extends React.Component {
                         <h4>{this.props.currentUser.username}</h4>
                     </ModalHeader>
                     <ModalBody>
-                        Delete
+                        <UserDeletePrompt />
+                        <UserError />
                     </ModalBody>
                 </Modal>
                 <Modal id="new-user-modal" size="modal-sm">
                     <ModalHeader>
-                        <span className="close" onClick={() => this.props.closeItemModal('#new-item-modal')}>&times;</span>
+                        <span className="close" onClick={() => this.props.closeUserModal('#new-user-modal')}>&times;</span>
                         <h4>New User</h4>
                     </ModalHeader>
                     <ModalBody>
