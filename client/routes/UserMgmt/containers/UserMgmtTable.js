@@ -4,6 +4,8 @@ import { Modal, ModalHeader, ModalBody } from '../../../components/Modal';
 import { getUser } from '../../../actions/user-mgmt-action';
 import { closeUserModal } from '../../../actions/modal-action';
 import { deAuthenticate } from '../../../actions/auth-action';
+import { NewUserForm, EditUserForm } from '../components/UserMgmtForm';
+import UserError from '../components/UserError';
 
 export class UserMgmtTable extends React.Component {
     componentDidUpdate() {
@@ -81,7 +83,8 @@ export class UserMgmtTable extends React.Component {
                         <h4>{this.props.currentUser.username}</h4>
                     </ModalHeader>
                     <ModalBody>
-                        Edit
+                        <EditUserForm />
+                        <UserError />
                     </ModalBody>
                 </Modal>
                 <Modal id="delete-user-modal" size="modal-sm">
@@ -91,6 +94,16 @@ export class UserMgmtTable extends React.Component {
                     </ModalHeader>
                     <ModalBody>
                         Delete
+                    </ModalBody>
+                </Modal>
+                <Modal id="new-user-modal" size="modal-sm">
+                    <ModalHeader>
+                        <span className="close" onClick={() => this.props.closeItemModal('#new-item-modal')}>&times;</span>
+                        <h4>New User</h4>
+                    </ModalHeader>
+                    <ModalBody>
+                        <NewUserForm />
+                        <UserError />
                     </ModalBody>
                 </Modal>
             </div>

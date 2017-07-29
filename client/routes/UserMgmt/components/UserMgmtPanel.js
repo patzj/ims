@@ -6,7 +6,7 @@ export const UserMgmtPanel = () => {
         <div className="col-xs-10 col-xs-offset-1">
             <h2 className="pull-left">User Management</h2>
             <div className="pull-right" style={{marginTop: '20px'}}>
-                <button className="btn btn-success">
+                <button className="btn btn-success" data-toggle="modal" data-target="#new-user-modal">
                     <span className="glyphicon glyphicon-plus-sign"></span>&nbsp;New User
                 </button>
             </div>
