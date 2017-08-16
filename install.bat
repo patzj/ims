@@ -8,5 +8,5 @@ call npm install -g qckwinsvc
 call npm install -g bower
 call npm install -g bower-installer
 call bower-installer
-call qckwinsvc --name "ims" --description "Inventory Management System" --script "build/server.js" --startImmediately
+call qckwinsvc --name "ims" --description "Inventory Management System" --script "build\\server.js" --startImmediately
 echo "Done"
