@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import NavLink from './NavLink';
 
 export class NavBar extends React.Component {
     componentDidMount() {
@@ -19,30 +19,30 @@ export class NavBar extends React.Component {
         return (
             <nav className="row">
                 <ul ref="links" className="nav nav-tabs col-xs-10 col-xs-offset-1">
-                    <li className="active"><Link to="/items">
+                    <NavLink to="/items">
                         <span className="glyphicon glyphicon-object-align-bottom"></span>
                         Items
-                    </Link></li>
-                    <li ><Link to="/transactions">
+                    </NavLink>
+                    <NavLink to="/transactions">
                         <span className="glyphicon glyphicon-list-alt"></span>
                         Transactions
-                    </Link></li>
+                    </NavLink>
                     {
                         JSON.parse(localStorage.getItem('ims-user')).role ===
                             'SYSTEM ADMIN' ?
-                                <li ><Link to="/logs">
+                                <NavLink to="/logs">
                                     <span className="glyphicon glyphicon-pencil">
                                     </span>
-                                    Logs</Link></li> : ''
+                                    Logs</NavLink> : ''
                     }
                     {
                         JSON.parse(localStorage.getItem('ims-user')).role ===
                             'SYSTEM ADMIN' ?
-                                <li ><Link to="/user-mgmt">
+                                <NavLink to="/user-mgmt">
                                     <span className="glyphicon glyphicon glyphicon-user">
                                     </span>
                                     User Management
-                                </Link></li>: ''
+                                </NavLink>: ''
                     }
                 </ul>
             </nav>

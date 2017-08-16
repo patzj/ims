@@ -17,6 +17,8 @@ import logsRoute from './routes/logs-route';
 import accessChecker from './middlewares/access-checker';
 import jsonChecker from './middlewares/json-checker';
 
+import createAdmin from './utils/create-admin';
+
 const app = new Express();
 const cfg = config();
 
@@ -37,7 +39,7 @@ winston.configure({
 // Configure app
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(Express.static('build/assets'));
+app.use(Express.static('build\\assets'));
 app.use(accessChecker(app));
 app.use(jsonChecker);
 app.set('logger', winston);
@@ -49,10 +51,11 @@ if(process.env.NODE_ENV !== 'production') {
 // Connect to database
 mongoose.promise = global.Promise;
 mongoose.connect(cfg.DATABASE, {useMongoClient: true});
+createAdmin();
 
 // Add routes
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('build/index.html'));
+    res.sendFile(path.resolve('build\\index.html'));
 });
 logInRoute(app);
 itemRoute(app);
