@@ -39,7 +39,7 @@ winston.configure({
 // Configure app
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(Express.static('build/assets'));
+app.use(Express.static('build\\assets'));
 app.use(accessChecker(app));
 app.use(jsonChecker);
 app.set('logger', winston);
@@ -55,7 +55,7 @@ createAdmin();
 
 // Add routes
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve('build/index.html'));
+    res.sendFile(path.resolve('build\\index.html'));
 });
 logInRoute(app);
 itemRoute(app);
