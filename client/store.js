@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
-import { createLogger } from 'redux-logger';
+// import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import authReducer from './reducers/auth-reducer';
 import itemsReducer from './reducers/items-reducer';
@@ -12,7 +12,7 @@ export const store = createStore(
         users: userMgmtReducer
     }),
     applyMiddleware(
-        createLogger(),
+        // createLogger(),
         thunk
     )
 );

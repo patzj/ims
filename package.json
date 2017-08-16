@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node build/server.js",
+    "start": "NODE_ENV=production && node build/server.js",
     "start:client": "npm run build:client && webpack-dev-server",
     "start:dev": "nodemon build/server.js",
     "build": "npm run build:client && npm run build:server",
-    "build:client": "webpack --progress --config webpack.config.client.js && cp client/index.html build/",
-    "build:server": "webpack --progress --config webpack.config.server.js"
+    "build:client": "webpack -p --progress --config webpack.config.client.js && cp client/index.html build/",
+    "build:client-win": "webpack -p --progress --config webpack.config.client.js && copy client\\index.html build\\index.html",
+    "build:server": "webpack -p --progress --config webpack.config.server.js"
   },
   "repository": {
     "type": "git",
