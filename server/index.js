@@ -17,6 +17,8 @@ import logsRoute from './routes/logs-route';
 import accessChecker from './middlewares/access-checker';
 import jsonChecker from './middlewares/json-checker';
 
+import createAdmin from './utils/create-admin';
+
 const app = new Express();
 const cfg = config();
 
@@ -49,6 +51,7 @@ if(process.env.NODE_ENV !== 'production') {
 // Connect to database
 mongoose.promise = global.Promise;
 mongoose.connect(cfg.DATABASE, {useMongoClient: true});
+createAdmin();
 
 // Add routes
 app.get('/', (req, res) => {
